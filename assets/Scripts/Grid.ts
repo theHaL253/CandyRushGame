@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, Prefab, instantiate, Sprite, Color } from 'cc';
+import { _decorator, Component, Node, Prefab, instantiate, Sprite, Color, Vec3 } from 'cc';
 const { ccclass, property } = _decorator;
 
 @ccclass('Grid')
@@ -27,7 +27,7 @@ export class Grid extends Component {
             this.grid[i] = [];
 
             for (let j = 0; j < 7; j++) {
-                const tile = instantiate(this.tilePrefab);
+                let tile = instantiate(this.tilePrefab);
                 tile.parent = this.node;
 
                 // Calculate tile position with spacing
@@ -47,15 +47,15 @@ export class Grid extends Component {
     }
 
     assignRandomColor(tile: Node) {
-        const colors = [Color.RED, Color.YELLOW, Color.BLUE, Color.GREEN, Color.BLACK];
+        const colors = [Color.RED, Color.YELLOW, Color.BLUE, Color.GREEN, Color.MAGENTA];
         const randomIndex = Math.floor(Math.random() * colors.length);
         const color = colors[randomIndex];
 
-        const tileSprite = tile.getComponent(cc.Sprite);
+        const tileSprite = tile.getComponentInChildren(Sprite);
         if (tileSprite) {
-            tileSprite.node.color = color;
+            //Not sure about the set color function
+            tileSprite.color = color;
+            console.log(tileSprite.color);
         }
     }
 }
-
-
