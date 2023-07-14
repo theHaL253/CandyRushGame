@@ -16,6 +16,11 @@ export class Grid extends Component {
     @property
     private tileSize: number = 100;
 
+    @property({
+        type: Node
+    })
+    public tile = null;
+
     start() {
         this.createGrid();
     }
@@ -27,31 +32,31 @@ export class Grid extends Component {
             this.grid[i] = [];
 
             for (let j = 0; j < 7; j++) {
-                let tile = instantiate(this.tilePrefab);
-                tile.parent = this.node;
+                this.tile = instantiate(this.tilePrefab);
+                this.tile.parent = this.node;
 
                 // Calculate tile position with spacing
                 const posX = (this.tileSize + this.tileSpacing) * i;
                 const posY = (this.tileSize + this.tileSpacing) * j;
 
-                tile.setPosition(posX, posY);
+                this.tile.setPosition(posX, posY);
 
                 // Assign random color to the tile
-                this.assignRandomColor(tile);
+                this.assignRandomColor(this.tile);
 
                 
                 //to assign a tile to the position above
-                this.grid[i][j] = tile;
+                this.grid[i][j] = this.tile;
             }
         }
     }
 
-    assignRandomColor(tile: Node) {
+    assignRandomColor() {
         const colors = [Color.RED, Color.YELLOW, Color.BLUE, Color.GREEN, Color.MAGENTA];
         const randomIndex = Math.floor(Math.random() * colors.length);
         const color = colors[randomIndex];
 
-        const tileSprite = tile.getComponentInChildren(Sprite);
+        const tileSprite = this.tile.getComponentInChildren(Sprite);
         if (tileSprite) {
             //Not sure about the set color function
             tileSprite.color = color;

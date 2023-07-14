@@ -4,8 +4,13 @@ import { Grid } from './Grid';
 
 @ccclass('GameCtrl')
 export class GameCtrl extends Component {
-    
+
     private touchStartPos: Vec3 = new Vec3(0,0,0);
+
+    @property({
+        type: Grid
+    })
+    public grid: Grid;
 
 
     registerSwipeEvents() {
@@ -20,22 +25,23 @@ export class GameCtrl extends Component {
             const deltaX = touchEndPos.x - this.touchStartPos.x;
             const deltaY = touchEndPos.y - this.touchStartPos.y;
 
-            const threshold = 50; // Minimum distance for a valid swipe
+            const thresholdmin = 10; // Minimum distance for a valid swipe
+            const thresholdmax = 100; // Maximum distance for a valid swipe
             const isHorizontalSwipe = Math.abs(deltaX) > Math.abs(deltaY);
 
             if (isHorizontalSwipe) {
-                if (deltaX > threshold) {
+                if (deltaX > thresholdmin) {
                     console.log('Swipe right');
                     // Handle swipe right event
-                } else if (deltaX < -threshold) {
+                } else if (deltaX < -thresholdmin) {
                     console.log('Swipe left');
                     // Handle swipe left event
                 }
             } else {
-                if (deltaY > threshold) {
+                if (deltaY > thresholdmin) {
                     console.log('Swipe up');
                     // Handle swipe up event
-                } else if (deltaY < -threshold) {
+                } else if (deltaY < -thresholdmin) {
                     console.log('Swipe down');
                     // Handle swipe down event
                 }
