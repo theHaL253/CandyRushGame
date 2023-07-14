@@ -6,20 +6,22 @@ export class Grid extends Component {
     @property({
         type: Prefab
     })
-    private tilePrefab = null;
+    public tilePrefab = null;
 
-    private grid: Node[][] = [];
-
-    @property
-    private tileSpacing: number = 1; // Spacing between tiles
+    public grid: Node[][] = [];
 
     @property
-    private tileSize: number = 100;
+    public tileSpacing: number = 10; // Spacing between tiles
+
+    @property
+    public tileSize: number = 100;
 
     @property({
         type: Node
     })
     public tile = null;
+
+    public touchStartPos: Vec3 = new Vec3(0,0,0);
 
     start() {
         this.createGrid();
@@ -41,11 +43,57 @@ export class Grid extends Component {
 
                 this.tile.setPosition(posX, posY);
 
+                //Swipe logic of each tile
+                this.tile.on(Node.EventType.TOUCH_START, (eventTouch) => {
+                    this.touchStartPos = eventTouch.getLocation();
+                })
+
+                //This touch will end at another tile. Not sure if this tile was sticked right way.
+                this.tile.on(Node.EventType.TOUCH_CANCEL, (eventTouch) => {
+                    if (!this.touchStartPos) return;
+        
+                    const touchCancelPos = eventTouch.getLocation();
+                    const deltaX = touchCancelPos.x - this.touchStartPos.x;
+                    const deltaY = touchCancelPos.y - this.touchStartPos.y;
+
+                    // console.log(touchCancelPos, deltaX, deltaY);
+        
+                    const thresHoldMin = this.tileSpacing; // Minimum distance for a valid swipe
+                    const thresHoldMax = this.tileSize; // Maximum distance for a valid swipe
+        
+                    const isHorizontalSwipe = Math.abs(deltaX) > Math.abs(deltaY); // I would check the right or left of this swipe later on: Done
+                    const isVerticalSwipe = Math.abs(deltaY) > Math.abs(deltaX);
+        
+                    // console.log(isHorizontalSwipe, isVerticalSwipe);
+                    //Logic Event goes here
+                    if (isHorizontalSwipe) {
+                        if (deltaX > thresHoldMin && deltaX < thresHoldMax) {
+                            console.log('Swipe right');
+                            // Handle swipe right event
+                        } else if (deltaX < -thresHoldMin && deltaX > -thresHoldMax) {
+                            console.log('Swipe left');
+                            // Handle swipe left event
+                        }
+                    } else if (isVerticalSwipe) {
+                        if (deltaY > thresHoldMin && deltaY < thresHoldMax) {
+                            console.log('Swipe up');
+                            // Handle swipe up event
+                        } else if (deltaY < -thresHoldMin && deltaY > -thresHoldMax) {
+                            console.log('Swipe down');
+                            // Handle swipe down event
+                        }
+                    } else {
+                        return false;
+                    }
+                })
+
                 // Assign random color to the tile
-                this.assignRandomColor(this.tile);
+                this.assignRandomColor();
+
+                //Handle swipe for each tile
 
                 
-                //to assign a tile to the position above
+                //to assign a tile to the position above, important
                 this.grid[i][j] = this.tile;
             }
         }
@@ -63,4 +111,13 @@ export class Grid extends Component {
             console.log(tileSprite.color);
         }
     }
+
+
+    public swapTiles(touchStartPos, touchEndPos) {
+        this.tile.setPosition(touchEndPos);
+        t
+        this.tile.setPosition(touchStartPos);
+    }
 }
+
+
