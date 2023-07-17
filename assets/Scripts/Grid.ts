@@ -22,6 +22,7 @@ export class Grid extends Component {
     public tile = null;
 
     public touchStartPos: Vec3 = new Vec3(0,0,0);
+    public touchCancelPos: Vec3 = new Vec3(0,0,0);
 
     start() {
         this.createGrid();
@@ -52,9 +53,9 @@ export class Grid extends Component {
                 this.tile.on(Node.EventType.TOUCH_CANCEL, (eventTouch) => {
                     if (!this.touchStartPos) return;
         
-                    const touchCancelPos = eventTouch.getLocation();
-                    const deltaX = touchCancelPos.x - this.touchStartPos.x;
-                    const deltaY = touchCancelPos.y - this.touchStartPos.y;
+                    this.touchCancelPos = eventTouch.getLocation();
+                    const deltaX = this.touchCancelPos.x - this.touchStartPos.x;
+                    const deltaY = this.touchCancelPos.y - this.touchStartPos.y;
 
                     // console.log(touchCancelPos, deltaX, deltaY);
         
@@ -70,31 +71,35 @@ export class Grid extends Component {
                         if (deltaX > thresHoldMin && deltaX < thresHoldMax) {
                             console.log('Swipe right');
                             // Handle swipe right event
+                            //grid[i+1][j]
+                            this.swipeRight(i,j);
                         } else if (deltaX < -thresHoldMin && deltaX > -thresHoldMax) {
                             console.log('Swipe left');
                             // Handle swipe left event
+                            //grid[i-1][j]
                         }
                     } else if (isVerticalSwipe) {
                         if (deltaY > thresHoldMin && deltaY < thresHoldMax) {
                             console.log('Swipe up');
                             // Handle swipe up event
+                            //grid[i][j+1]
                         } else if (deltaY < -thresHoldMin && deltaY > -thresHoldMax) {
                             console.log('Swipe down');
                             // Handle swipe down event
+                            //grid[i][j-1]
                         }
                     } else {
                         return false;
                     }
                 })
 
+                //to assign a tile to the position above, important
+                this.grid[i][j] = this.tile;
+
                 // Assign random color to the tile
                 this.assignRandomColor();
 
                 //Handle swipe for each tile
-
-                
-                //to assign a tile to the position above, important
-                this.grid[i][j] = this.tile;
             }
         }
     }
@@ -108,15 +113,32 @@ export class Grid extends Component {
         if (tileSprite) {
             //Not sure about the set color function
             tileSprite.color = color;
-            console.log(tileSprite.color);
         }
     }
 
+    // swipeRight(i,j) {
+    //     const tile1Pos = this.touchStartPos;
+    //     const tile2Pos = this.touchCancelPos;
+        
+    //     this.grid[i][j].setPosition(tile2Pos);
+    //     this.grid[i+1][j].setPosition(tile1Pos);
 
-    public swapTiles(touchStartPos, touchEndPos) {
-        this.tile.setPosition(touchEndPos);
-        t
-        this.tile.setPosition(touchStartPos);
+    //     this.grid[i][j] = this.tile;
+    //     this.grid[i][j+1] = this.tile;
+    // }
+
+    swipeRight(i: number, j: number) {
+        if (i < this.grid.length - 1) {
+            const temp = this.grid[i][j];
+            this.grid[i][j] = this.grid[i+1][j];
+            this.grid[i+1][j] = temp;
+
+            this.grid[i][j].setPosition(this.grid[i][j].getPosition());
+            this.grid[i+1][j].setPosition(this.grid[i+1][j].getPosition());
+
+            this.grid[i][j] = this.tile;
+            this.grid[i+1][j] = this.tile;
+        }
     }
 }
 
