@@ -288,7 +288,7 @@
       "__uuid__": "536ad903-600d-426b-8c96-567e2f726d4d",
       "__expectedType__": "cc.Prefab"
     },
-    "tileSpacing": 5,
+    "tileSpacing": 10,
     "tileSize": 100,
     "tile": null,
     "_id": "4ecZ0Z2fVERqpU/NQJQ6uT"
