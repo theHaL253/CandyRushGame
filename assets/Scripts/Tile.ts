@@ -25,10 +25,6 @@ export class Tile extends Component {
         Grid.instance.grid[this.i][this.j] = tempTile2;
         Grid.instance.grid[this.i + 1][this.j] = tempTile1;
 
-        // const tempTile = Grid.instance.grid[this.i][this.j];
-        // Grid.instance.grid[this.i][this.j] = Grid.instance.grid[this.i + 1][this.j]
-        // Grid.instance.grid[this.i + 1][this.j] = tempTile;
-
         // // Update indices i and j
         const tempI = tempTile1.getComponent(Tile).i;
         const tempJ = tempTile2.getComponent(Tile).j;
@@ -56,10 +52,6 @@ export class Tile extends Component {
         const tempTile2 = Grid.instance.grid[this.i - 1][this.j];
         Grid.instance.grid[this.i][this.j] = tempTile2;
         Grid.instance.grid[this.i - 1][this.j] = tempTile1;
-
-        // const tempTile = Grid.instance.grid[this.i][this.j];
-        // Grid.instance.grid[this.i][this.j] = Grid.instance.grid[this.i + 1][this.j]
-        // Grid.instance.grid[this.i + 1][this.j] = tempTile;
 
         // // Update indices i and j
         const tempI = tempTile1.getComponent(Tile).i;

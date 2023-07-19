@@ -1,5 +1,6 @@
 import { _decorator, Component, Node, Prefab, instantiate, Sprite, Color, Vec3, v3, find } from 'cc';
 import { Tile } from './Tile';
+import { DestroynRefillTile } from './DestroynRefillTile';
 const { ccclass, property } = _decorator;
 
 @ccclass('Grid')
@@ -17,8 +18,6 @@ export class Grid extends Component {
     @property
     public tileSize: number = 100;
 
-    public game;
-
     public touchStartPos: Vec3 = new Vec3(0, 0, 0);
     public touchCancelPos: Vec3 = new Vec3(0, 0, 0);
     public static instance: Grid = null;
@@ -29,6 +28,7 @@ export class Grid extends Component {
 
     start() {
         this.createGrid();
+        // this.removeColorCombos();
     }
 
     createGrid() {
@@ -68,7 +68,7 @@ export class Grid extends Component {
                     const thresHoldMin = this.tileSpacing; // Minimum distance for a valid swipe
                     const thresHoldMax = this.tileSize; // Maximum distance for a valid swipe
 
-                    const isHorizontalSwipe = Math.abs(deltaX) > Math.abs(deltaY); // I would check the right or left of this swipe later on: Done
+                    const isHorizontalSwipe = Math.abs(deltaX) > Math.abs(deltaY);
                     const isVerticalSwipe = Math.abs(deltaY) > Math.abs(deltaX);
 
                     //Logic Event goes here
@@ -96,8 +96,10 @@ export class Grid extends Component {
                 this.assignRandomColor(tile);
             }
         }
+        console.log(this.grid.length);
     }
 
+    
     assignRandomColor(tile) {
         const colors = [Color.RED, Color.YELLOW, Color.BLUE, Color.GREEN, Color.MAGENTA];
         const randomIndex = Math.floor(Math.random() * colors.length);
@@ -108,10 +110,5 @@ export class Grid extends Component {
             //Not sure about the set color function
             tileSprite.color = color;
         }
-    }
-
-
-    selfDetectedCellsCombo() {
-        
     }
 }
