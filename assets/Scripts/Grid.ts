@@ -1,6 +1,6 @@
 import { _decorator, Component, Node, Prefab, instantiate, Sprite, Color, Vec3, v3, find } from 'cc';
 import { Tile } from './Tile';
-import { DestroynRefillTile } from './DestroynRefillTile';
+import { GameLogic } from './GameLogic';
 const { ccclass, property } = _decorator;
 
 @ccclass('Grid')
@@ -10,7 +10,7 @@ export class Grid extends Component {
     })
     public tilePrefab = null;
 
-    public grid: Node[][] = [];
+    public gameLogic: GameLogic = null;
 
     @property
     public tileSpacing: number = 10; // Spacing between tiles
@@ -20,6 +20,7 @@ export class Grid extends Component {
 
     public touchStartPos: Vec3 = new Vec3(0, 0, 0);
     public touchCancelPos: Vec3 = new Vec3(0, 0, 0);
+    public grid: Node[][] = [];
     public static instance: Grid = null;
 
     protected onLoad(): void {
@@ -28,7 +29,6 @@ export class Grid extends Component {
 
     start() {
         this.createGrid();
-        // this.removeColorCombos();
     }
 
     createGrid() {
@@ -94,9 +94,13 @@ export class Grid extends Component {
 
                 // Assign random color to the tile
                 this.assignRandomColor(tile);
+
+                //Delete combos 
+                // this.gameLogic.removeColorCombos();
             }
         }
-        console.log(this.grid.length);
+        this.gameLogic = GameLogic.instance;
+        this.gameLogic.removeColorCombos();
     }
 
     
