@@ -17,26 +17,52 @@ export class GameLogic extends Component {
         GameLogic.instance = this;
     }
 
+    // @property({
+    //     type: Tile
+    // })
+    // public tile: Tile;
+
 
     removeColorCombos() {
         console.log("asdasd");
         let toRemove = [];
-    
-        // Check for horizontal and vertical combos
+
         for (let i = 0; i < 7; i++) {
-            for (let j = 0; j < this.grid[i].length; j++) {
-                let xCombo = [this.grid[i][j]];
-                let yCombo = [this.grid[i][j]];
-                
-    
-                // Check for horizontal combos. Understand it!
+            for (let j = 0; j < this.grid.grid[i].length; j++) {
+                let xCombo = [this.grid.grid[i][j]];
+                let yCombo = [this.grid.grid[i][j]];
+
+                const tileComponent = this.grid.grid[i][j].getComponent(Tile);
+                const tileColor = tileComponent.getTileColor();
+
+                // Check for horizontal combos
                 for (let k = i + 1; k < 7; k++) {
-                    if (this.grid[k][j].getComponentInChildren(Sprite).color.equals(this.grid[i][j].getComponentInChildren(Sprite).color)) {
-                        xCombo.push(this.grid[k][j]);
+                    const nextTileComponent = this.grid.grid[k][j].getComponent(Tile);
+                    const nextTileColor = nextTileComponent.getTileColor();
+                    if (nextTileColor.equals(tileColor)) {
+                        xCombo.push(this.grid.grid[k][j]);
                     } else {
                         break;
                     }
+
+                    console.log(nextTileColor); //Not working
                 }
+    
+        // Check for horizontal and vertical combos
+        // for (let i = 0; i < 7; i++) {
+        //     for (let j = 0; j < this.grid[i].length; j++) {
+        //         let xCombo = [this.grid[i][j]];
+        //         let yCombo = [this.grid[i][j]];
+                
+    
+        //         // Check for horizontal combos. Understand it!
+        //         for (let k = i + 1; k < 7; k++) {
+        //             if (this.grid[k][j].getComponentInChildren(Sprite).color.equals(this.grid[i][j].getComponentInChildren(Sprite).color)) {
+        //                 xCombo.push(this.grid[k][j]);
+        //             } else {
+        //                 break;
+        //             }
+        //         }
 
                 console.log(xCombo);
     

@@ -7,6 +7,19 @@ export class Tile extends Component {
     public i: number;
     public j: number;
 
+    public tileColor: Color; // Private variable to store the color
+
+    start() {
+        const tileSprite = this.getComponentInChildren(Sprite);
+        if (tileSprite) {
+            this.tileColor = tileSprite.color;
+        }
+    }
+
+    getTileColor(): Color {
+        return this.tileColor;
+    }
+
     swipeRight() {
         // console.log(this.grid[i][j].position, this.grid[i + 1][j].position);
 

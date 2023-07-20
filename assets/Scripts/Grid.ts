@@ -100,10 +100,12 @@ export class Grid extends Component {
             }
         }
         this.gameLogic = GameLogic.instance;
-        this.gameLogic.removeColorCombos();
+        this.scheduleOnce(() => {
+            this.gameLogic.removeColorCombos();
+        }, 1)
     }
 
-    
+
     assignRandomColor(tile) {
         const colors = [Color.RED, Color.YELLOW, Color.BLUE, Color.GREEN, Color.MAGENTA];
         const randomIndex = Math.floor(Math.random() * colors.length);
