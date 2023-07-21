@@ -22,30 +22,31 @@ export class GameLogic extends Component {
     // })
     // public tile: Tile;
 
-
     removeColorCombos() {
         console.log("asdasd");
         let toRemove = [];
 
         for (let i = 0; i < 7; i++) {
-            for (let j = 0; j < this.grid.grid[i].length; j++) {
+            for (let j = 0; j < 7; j++) {
                 let xCombo = [this.grid.grid[i][j]];
                 let yCombo = [this.grid.grid[i][j]];
 
                 const tileComponent = this.grid.grid[i][j].getComponent(Tile);
                 const tileColor = tileComponent.getTileColor();
 
+                console.log(tileColor);
+
                 // Check for horizontal combos
                 for (let k = i + 1; k < 7; k++) {
                     const nextTileComponent = this.grid.grid[k][j].getComponent(Tile);
                     const nextTileColor = nextTileComponent.getTileColor();
-                    if (nextTileColor.equals(tileColor)) {
+                    if (nextTileColor == tileColor) {
                         xCombo.push(this.grid.grid[k][j]);
                     } else {
                         break;
                     }
 
-                    console.log(nextTileColor); //Not working
+                    // console.log(nextTileColor);
                 }
     
         // Check for horizontal and vertical combos
@@ -64,10 +65,10 @@ export class GameLogic extends Component {
         //             }
         //         }
 
-                console.log(xCombo);
+                // console.log(xCombo);
     
                 // Check for vertical combos. Understand it!
-                for (let k = j + 1; k < this.grid[i].length; k++) {
+                for (let k = j + 1; k < 7; k++) {
                     if (this.grid[i][k].getComponentInChildren(Sprite).color.equals(this.grid[i][j].getComponentInChildren(Sprite).color)) {
                         yCombo.push(this.grid[i][k]);
                     } else {
@@ -85,7 +86,7 @@ export class GameLogic extends Component {
             }
         }
 
-        console.log(toRemove);
+        // console.log(toRemove);
     
         // Remove duplicates
         toRemove = Array.from(new Set(toRemove));
@@ -95,7 +96,7 @@ export class GameLogic extends Component {
             let i = node.getComponent(Tile).i;
             let j = node.getComponent(Tile).j;
     
-            if (i > 0 && j > 0 && i < 6 && j < this.grid[i].length - 1) {
+            if (i > 0 && j > 0 && i < 6 && j < 7 - 1) {
                 if (toRemove.includes(this.grid[i-1][j]) && toRemove.includes(this.grid[i+1][j])
                     && toRemove.includes(this.grid[i][j-1]) && toRemove.includes(this.grid[i][j+1])) {
                     
@@ -110,7 +111,7 @@ export class GameLogic extends Component {
                 }
             }
         }
-        console.log(toRemove);
+        // console.log(toRemove);
     
         // Remove the rest of the combos
         for (let node of toRemove) {

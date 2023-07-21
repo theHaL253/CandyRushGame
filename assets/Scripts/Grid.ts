@@ -21,6 +21,8 @@ export class Grid extends Component {
     public touchStartPos: Vec3 = new Vec3(0, 0, 0);
     public touchCancelPos: Vec3 = new Vec3(0, 0, 0);
     public grid: Node[][] = [];
+
+    public static tileSprite: Color = new Color();
     public static instance: Grid = null;
 
     protected onLoad(): void {
@@ -106,15 +108,20 @@ export class Grid extends Component {
     }
 
 
+
+    // Cannot move this function to the Tile.ts file
     assignRandomColor(tile) {
         const colors = [Color.RED, Color.YELLOW, Color.BLUE, Color.GREEN, Color.MAGENTA];
+        const colorTypes = ["RED", "YELLOW", "BLUE", "GREEN", "MAGENTA"];
         const randomIndex = Math.floor(Math.random() * colors.length);
         const color = colors[randomIndex];
+        tile.getComponent(Tile).type = colorTypes[randomIndex]
 
-        const tileSprite = tile.getComponentInChildren(Sprite);
-        if (tileSprite) {
+        const tileColor1 = tile.getComponentInChildren(Sprite);
+        if (tileColor1) {
+            tileColor1.color = color;
             //Not sure about the set color function
-            tileSprite.color = color;
+            Grid.tileSprite = tileColor1.color;
         }
     }
 }

@@ -6,18 +6,21 @@ const { ccclass, property } = _decorator;
 export class Tile extends Component {
     public i: number;
     public j: number;
+    public type: string = "";
 
-    public tileColor: Color; // Private variable to store the color
+    // public tileColor: Color;
 
-    start() {
-        const tileSprite = this.getComponentInChildren(Sprite);
-        if (tileSprite) {
-            this.tileColor = tileSprite.color;
-        }
-    }
+    // start() {
+    //     const tileSprite = this.getComponentInChildren(Sprite);
+    //     if (tileSprite) {
+    //         this.tileColor = tileSprite.color;
+    //     }
+    // }
 
-    getTileColor(): Color {
-        return this.tileColor;
+    getTileColor(): string {
+        console.log(this.type);
+        return this.type;
+        // return this.tileColor;
     }
 
     swipeRight() {
