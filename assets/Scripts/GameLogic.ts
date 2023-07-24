@@ -1,4 +1,4 @@
-import { _decorator, Component, Sprite } from 'cc';
+import { _decorator, Component, instantiate, Sprite } from 'cc';
 import { Grid } from './Grid';
 import { Tile } from './Tile';
 const { ccclass, property } = _decorator;
@@ -22,7 +22,6 @@ export class GameLogic extends Component {
 
         for (let i = 0; i < 7; i++) {
             for (let j = 0; j < 7; j++) {
-                if (!this.grid.grid[i][j]) continue;
                 let xCombo = [this.grid.grid[i][j]];
                 let yCombo = [this.grid.grid[i][j]];
 
@@ -31,7 +30,6 @@ export class GameLogic extends Component {
 
                 // Check for horizontal combos
                 for (let k = i + 1; k < 7; k++) {
-                    if (!this.grid.grid[k] || !this.grid.grid[k][j]) break; // Check if the row and cell exist
                     const nextTileComponent = this.grid.grid[k][j].getComponent(Tile);
                     const nextTileColor = nextTileComponent.getTileColor();
 
@@ -42,10 +40,8 @@ export class GameLogic extends Component {
                     }
                 }
     
-                // Check for vertical combos. Understand it!
-
+                // Check for vertical combos
                 for (let k = j + 1; k < 7; k++) {
-                    if (!this.grid.grid[i][k]) break;
                     const nextTileComponent = this.grid.grid[i][k].getComponent(Tile);
                     const nextTileColor = nextTileComponent.getTileColor();
                     
@@ -94,6 +90,43 @@ export class GameLogic extends Component {
         // Remove the rest of the combos
         for (let node of toRemove) {
             node.destroy();
+        }
+
+        // After destroying matching tiles, refill the empty spaces from above
+        this.refillTiles();
+    }
+
+    refillTiles() {
+        for (let i = 0; i < 7; i++) {
+            let emptyCells = 0;
+            for (let j = 0; j < 7; j++) {
+                if (!this.grid.grid[i][j]) {
+                    emptyCells++;
+                } else if (emptyCells > 0) {
+                    let tile = this.grid.grid[i][j];
+                    let tileComponent: Tile = tile.getComponent(Tile);
+                    tileComponent.i -= emptyCells;
+                    tile.setPosition((this.grid.tileSize + this.grid.tileSpacing) * i, (this.grid.tileSize + this.grid.tileSpacing) * (j - emptyCells));
+                    this.grid.grid[i][j - emptyCells] = tile;
+                    this.grid.grid[i][j] = null;
+                }
+            }
+    
+            for (let j = 0; j < emptyCells; j++) {
+                let tile = instantiate(this.grid.tilePrefab);
+                let tileComponent: Tile = tile.getComponent(Tile);
+                tileComponent.i = 7 - emptyCells + j;
+                tileComponent.j = i;
+                tile.parent = this.grid.node;
+    
+                const posX = (this.grid.tileSize + this.grid.tileSpacing) * i;
+                const posY = (this.grid.tileSize + this.grid.tileSpacing) * (7 - emptyCells + j);
+                tile.setPosition(posX, posY);
+    
+                this.grid.assignRandomColor(tile);
+    
+                this.grid.grid[i][7 - emptyCells + j] = tile;
+            }
         }
     }
 }
