@@ -97,9 +97,6 @@ export class Grid extends Component {
 
                 // Assign random color to the tile
                 this.assignRandomColor(tile);
-
-                //Delete combos 
-                //this.gameLogic.removeColorCombos();
             }
         }
         this.gameLogic = GameLogic.instance;

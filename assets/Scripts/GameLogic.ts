@@ -37,7 +37,6 @@ export class GameLogic extends Component {
 
                     if (nextTileColor == tileColor) {
                         xCombo.push(this.grid.grid[k][j]);
-                        // console.log(xCombo);
                     } else {
                         break;
                     }
@@ -66,12 +65,11 @@ export class GameLogic extends Component {
                 }
             }
         }
-
-        console.log(toRemove);
     
         // Remove duplicates
         toRemove = Array.from(new Set(toRemove));
-    
+        
+        console.log(toRemove);
     
         // Check for cross combos and remove. This means each grid[i][j] in the toRemove array is a node
         for (let node of toRemove) {
@@ -79,21 +77,19 @@ export class GameLogic extends Component {
             let j = node.getComponent(Tile).j;
 
             if (i > 0 && j > 0 && i < 6 && j < 6) {
-                if (toRemove.includes(this.grid[i-1][j]) && toRemove.includes(this.grid[i+1][j])
-                    && toRemove.includes(this.grid[i][j-1]) && toRemove.includes(this.grid[i][j+1])) {
-                    
+                if (toRemove.includes(this.grid.grid[i-1][j]) && toRemove.includes(this.grid.grid[i+1][j])
+                    && toRemove.includes(this.grid.grid[i][j-1]) && toRemove.includes(this.grid.grid[i][j+1])) {
                     // This function is to remove cross combos
                     for (let x of [-1, 0, 1]) {
                         for (let y of [-1, 0, 1]) {
                             if (Math.abs(x) !== Math.abs(y)) {
-                                this.grid[i+x][j+y].destroy();
+                                this.grid.grid[i+x][j+y].destroy();
                             }
                         }
                     } 
                 }
             }
         }
-        // console.log(toRemove);
     
         // Remove the rest of the combos
         for (let node of toRemove) {
