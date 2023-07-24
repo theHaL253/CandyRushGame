@@ -4,23 +4,14 @@ const { ccclass, property } = _decorator;
 
 @ccclass('Tile')
 export class Tile extends Component {
+
+    //I will set the tile 3 main components like: i, j number, color as string type
     public i: number;
     public j: number;
     public type: string = "";
 
-    // public tileColor: Color;
-
-    // start() {
-    //     const tileSprite = this.getComponentInChildren(Sprite);
-    //     if (tileSprite) {
-    //         this.tileColor = tileSprite.color;
-    //     }
-    // }
-
     getTileColor(): string {
-        console.log(this.type);
         return this.type;
-        // return this.tileColor;
     }
 
     swipeRight() {
