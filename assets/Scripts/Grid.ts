@@ -31,7 +31,6 @@ export class Grid extends Component {
 
     start() {
         this.createGrid();
-        // this.gameLogic.removeColorCombos();
     }
 
     createGrid() {
@@ -103,6 +102,7 @@ export class Grid extends Component {
         //This function is for schedule this function removeColorCombos run after 1s
         this.scheduleOnce(() => {
             this.gameLogic.removeColorCombos();
+            this.gameLogic.refillTiles();
         }, 1)
     }
 

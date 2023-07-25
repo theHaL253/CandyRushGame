@@ -1,4 +1,4 @@
-import { _decorator, Component, instantiate, Sprite } from 'cc';
+import { _decorator, Component, instantiate, Sprite, Vec3 } from 'cc';
 import { Grid } from './Grid';
 import { Tile } from './Tile';
 const { ccclass, property } = _decorator;
@@ -92,40 +92,43 @@ export class GameLogic extends Component {
             node.destroy();
         }
 
-        // After destroying matching tiles, refill the empty spaces from above
-        this.refillTiles();
+        // this.refillTiles();
     }
 
+
     refillTiles() {
-        for (let i = 0; i < 7; i++) {
-            let emptyCells = 0;
-            for (let j = 0; j < 7; j++) {
-                if (!this.grid.grid[i][j]) {
-                    emptyCells++;
-                } else if (emptyCells > 0) {
-                    let tile = this.grid.grid[i][j];
-                    let tileComponent: Tile = tile.getComponent(Tile);
-                    tileComponent.i -= emptyCells;
-                    tile.setPosition((this.grid.tileSize + this.grid.tileSpacing) * i, (this.grid.tileSize + this.grid.tileSpacing) * (j - emptyCells));
-                    this.grid.grid[i][j - emptyCells] = tile;
-                    this.grid.grid[i][j] = null;
+        for (let i = 0; i < this.grid.grid.length; i++) {
+            for (let j = 0; j < this.grid.grid[i].length; j++) {
+                if (this.grid.grid[i][j] === null) {
+                    console.log(this.grid.grid[i][j]);
+                    for (let k = j; k < this.grid.grid[i].length; k++) {
+                        if (k < this.grid.grid[i].length - 1) {
+                            this.grid.grid[i][k] = this.grid.grid[i][k + 1];
+                            this.grid.grid[i][k + 1] = null;
+
+                            console.log(this.grid.grid[i][k]);
+                            if (this.grid.grid[i][k]) {
+
+                                console.log(this.grid.grid[i][k]);
+                                // Shift down the tile. 
+                                // This is for set Position for the grid[i][j] after assigning the value
+                                this.grid.grid[i][k].setPosition(new Vec3(i * (this.grid.tileSize + this.grid.tileSpacing), k * (this.grid.tileSize + this.grid.tileSpacing)));
+                            }
+                        } else {
+                            // Instantiate a new tile at the top position
+                            let tile = instantiate(this.grid.tilePrefab);
+                            let tileComponent: Tile = tile.addComponent(Tile);
+                            tileComponent.i = i;
+                            tileComponent.j = k;
+                            tile.parent = this.grid.node;
+                            const posX = (this.grid.tileSize + this.grid.tileSpacing) * i;
+                            const posY = (this.grid.tileSize + this.grid.tileSpacing) * k;
+                            tile.setPosition(posX, posY);
+                            this.grid.assignRandomColor(tile);
+                            this.grid.grid[i][k] = tile;
+                        }
+                    }
                 }
-            }
-    
-            for (let j = 0; j < emptyCells; j++) {
-                let tile = instantiate(this.grid.tilePrefab);
-                let tileComponent: Tile = tile.getComponent(Tile);
-                tileComponent.i = 7 - emptyCells + j;
-                tileComponent.j = i;
-                tile.parent = this.grid.node;
-    
-                const posX = (this.grid.tileSize + this.grid.tileSpacing) * i;
-                const posY = (this.grid.tileSize + this.grid.tileSpacing) * (7 - emptyCells + j);
-                tile.setPosition(posX, posY);
-    
-                this.grid.assignRandomColor(tile);
-    
-                this.grid.grid[i][7 - emptyCells + j] = tile;
             }
         }
     }
