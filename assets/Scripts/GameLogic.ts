@@ -17,6 +17,9 @@ export class GameLogic extends Component {
         GameLogic.instance = this;
     }
 
+    public row: number;
+    public col: number;
+
     removeColorCombos() {
         let toRemove = [];
 
@@ -89,9 +92,12 @@ export class GameLogic extends Component {
     
         // Remove the rest of the combos
         for (let node of toRemove) {
+            
             node.destroy();
+            // let tileComponent = node.getComponent(Tile);
+            // i = tileComponent.i;
+            // j = tileComponent.j;
         }
-
         // this.refillTiles();
     }
 
@@ -99,22 +105,22 @@ export class GameLogic extends Component {
     refillTiles() {
         for (let i = 0; i < this.grid.grid.length; i++) {
             for (let j = 0; j < this.grid.grid[i].length; j++) {
-                if (this.grid.grid[i][j] === null) {
+                if (this.grid.grid[i][j].active === false) {
+                    // The thing is how to still access to the variable i, j after destroying the node
                     console.log(this.grid.grid[i][j]);
                     for (let k = j; k < this.grid.grid[i].length; k++) {
                         if (k < this.grid.grid[i].length - 1) {
                             this.grid.grid[i][k] = this.grid.grid[i][k + 1];
                             this.grid.grid[i][k + 1] = null;
 
-                            console.log(this.grid.grid[i][k]);
+                            // console.log(this.grid.grid[i][k]);
                             if (this.grid.grid[i][k]) {
-
-                                console.log(this.grid.grid[i][k]);
                                 // Shift down the tile. 
-                                // This is for set Position for the grid[i][j] after assigning the value
+                                // This is for set Position for the grid[i][j] after assigning the value. Understand it
                                 this.grid.grid[i][k].setPosition(new Vec3(i * (this.grid.tileSize + this.grid.tileSpacing), k * (this.grid.tileSize + this.grid.tileSpacing)));
                             }
                         } else {
+                            // console.log(this.grid.grid[i][j]);
                             // Instantiate a new tile at the top position
                             let tile = instantiate(this.grid.tilePrefab);
                             let tileComponent: Tile = tile.addComponent(Tile);
