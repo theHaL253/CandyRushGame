@@ -132,6 +132,7 @@ export class GameLogic extends Component {
                             tile.setPosition(posX, posY);
                             this.grid.assignRandomColor(tile);
                             this.grid.grid[i][k] = tile;
+                            console.log(this.grid.grid[i][k]);
                         }
                     }
                 }
